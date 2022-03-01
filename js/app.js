@@ -25,6 +25,7 @@ const searchPhone = () => {
             .then(res => res.json())
             .then(data => displayPhone(data.data))
         errorHandle('blank-input', 'none');
+        errorHandle('not-found', 'none');
         spinnerAndResultHandle('spinner', 'block');
         spinnerAndResultHandle('result-container', 'none');
     }
@@ -102,7 +103,7 @@ const displayPhoneDetail = info => {
     const div = document.createElement('div');
     div.innerHTML = `
          <div class="card w-50 mx-auto">
-                <div class="d-flex justify-content-center align-items-center shadow p-3">
+                <div class="d-md-flex justify-content-center align-items-center shadow p-3">
                     <div>
                         <img src="${info.image}" class="img-fluid img-thumbnail" alt="">
                     </div>
