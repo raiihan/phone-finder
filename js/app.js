@@ -70,7 +70,6 @@ const displayPhone = phones => {
                     </div>`;
                 resultContainer.appendChild(div);
             })
-
         }
         else {
             // display when items under 20
@@ -112,7 +111,6 @@ const displayPhoneDetail = info => {
     // Destructure phone info object
     const { storage, displaySize, chipSet, memory } = info.mainFeatures;
     const [first, second, third, fourth, fifth, sixth] = info.mainFeatures.sensors;
-    const { WLAN, Bluetooth, GPS, NFC, Radio, USB } = info.others;
 
     // Get and set phone details by id
     const phoneDetails = document.getElementById('phone-details');
@@ -148,24 +146,17 @@ const displayPhoneDetail = info => {
                  <h4 class="text-info fw-bold">Others:-</h4>
              </div>
              <ul class="list-group list-group-flush">
-                 <li class="list-group-item"><b>WLAN:</b> ${WLAN}</li>
-                 <li class="list-group-item"><b>Bluetooth:</b> ${Bluetooth}</li>
-                 <li class="list-group-item"><b>GPS:</b> ${GPS}</li>
-                 <li class="list-group-item"><b>NFC:</b> ${NFC}</li>
-                 <li class="list-group-item"><b>Radio:</b> ${Radio}</li>
-                 <li class="list-group-item"><b>USB:</b> ${USB}</li>
+                 <li class="list-group-item"><b>WLAN:</b> ${info?.others?.WLAN}</li>
+                 <li class="list-group-item"><b>Bluetooth:</b> ${info?.others?.Bluetooth}</li>
+                 <li class="list-group-item"><b>GPS:</b> ${info?.others?.GPS}</li>
+                 <li class="list-group-item"><b>NFC:</b> ${info?.others?.NFC}</li>
+                 <li class="list-group-item"><b>Radio:</b> ${info?.others?.Radio}</li>
+                 <li class="list-group-item"><b>USB:</b> ${info?.others?.USB}</li>
              </ul>
          </div>`;
     phoneDetails.appendChild(div);
 
     // When Spinner Loading Complete then show Phone Details
     spinnerAndResultHandle('phone-details', 'block');
-
-
-    /* info.mainFeatures.sensors.forEach(sensor => console.log("1", sensor))
-    console.log('hello')
-    for (const key in info.others) {
-        console.log("2", key)
-    } */
 }
 

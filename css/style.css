@@ -7,11 +7,17 @@
 #error-not-found{
     display: none;
 }
+
 /* Spinner Handle */
 #spinner{
     display: none;
 }
+
 /* main content handle */
 #result-container{
+    display: none;
+}
+
+#seeAllPhone{
     display: none;
 }
