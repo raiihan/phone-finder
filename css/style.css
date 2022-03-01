@@ -1,7 +1,4 @@
-/* See More Button */
-#seeAllPhone{
-    display: none;
-}
+/* Error handle */
 
 #error-blank-input{
     display: none;
@@ -10,11 +7,11 @@
 #error-not-found{
     display: none;
 }
-
+/* Spinner Handle */
 #spinner{
     display: none;
 }
-
+/* main content handle */
 #result-container{
     display: none;
 }

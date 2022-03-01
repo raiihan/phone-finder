@@ -15,6 +15,7 @@ const searchPhone = () => {
     //    clear Search field
     searchText.value = '';
 
+    // Check input is blank or not blank
     if (!searchPhoneName) {
         errorHandle('blank-input', 'block');
     }
@@ -24,10 +25,15 @@ const searchPhone = () => {
         fetch(url)
             .then(res => res.json())
             .then(data => displayPhone(data.data))
+
+        // when get data that time error display none
         errorHandle('blank-input', 'none');
         errorHandle('not-found', 'none');
+        // data is loading display the spinner
         spinnerAndResultHandle('spinner', 'block');
+        // when data is loading and spinner the display that time others elements display none
         spinnerAndResultHandle('result-container', 'none');
+        spinnerAndResultHandle('phone-details', 'none');
     }
 }
 
@@ -39,11 +45,15 @@ const displayPhone = phones => {
     const phoneDetails = document.getElementById('phone-details');
     phoneDetails.textContent = '';
 
+    // Check the data is available
     if (phones.length == 0) {
+        // data is not availbe then show the error
         errorHandle('not-found', 'block');
+        // display the error and stop spinner
         spinnerAndResultHandle('spinner', 'none')
     }
     else {
+        // Display the maximum 20 items
         if (!phones.length <= 20) {
             const phonesLength20 = phones.splice(0, 20);
             phonesLength20.forEach(phone => {
@@ -63,6 +73,7 @@ const displayPhone = phones => {
 
         }
         else {
+            // display when items under 20
             phones.forEach(phone => {
                 const div = document.createElement('div');
                 div.classList.add('col');
@@ -78,8 +89,11 @@ const displayPhone = phones => {
                 resultContainer.appendChild(div);
             })
         }
-        spinnerAndResultHandle('result-container', 'flex');
+        // when find the phone that times error display none
         errorHandle('not-found', 'none');
+        // When Spinner Loading Complete then Display Phone
+        spinnerAndResultHandle('result-container', 'flex');
+        // when display the phone then stop the spinner
         spinnerAndResultHandle('spinner', 'none');
     }
 }
@@ -93,11 +107,14 @@ const phoneDetails = async phoneId => {
     displayPhoneDetail(data.data)
 }
 
+// Display phone information 
 const displayPhoneDetail = info => {
+    // Destructure phone info object
     const { storage, displaySize, chipSet, memory } = info.mainFeatures;
     const [first, second, third, fourth, fifth, sixth] = info.mainFeatures.sensors;
     const { WLAN, Bluetooth, GPS, NFC, Radio, USB } = info.others;
 
+    // Get and set phone details by id
     const phoneDetails = document.getElementById('phone-details');
     phoneDetails.textContent = '';
     const div = document.createElement('div');
@@ -141,6 +158,8 @@ const displayPhoneDetail = info => {
          </div>`;
     phoneDetails.appendChild(div);
 
+    // When Spinner Loading Complete then show Phone Details
+    spinnerAndResultHandle('phone-details', 'block');
 
 
     /* info.mainFeatures.sensors.forEach(sensor => console.log("1", sensor))
