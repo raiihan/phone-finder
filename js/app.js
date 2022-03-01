@@ -16,20 +16,22 @@ const searchPhone = () => {
             .then(res => res.json())
             .then(data => displayPhone(data.data))
     }
-
 }
 
 // Iteration phones array
 const displayPhone = phones => {
     const resultContainer = document.getElementById('result-container');
     resultContainer.textContent = '';
+    // Phone Details
+    const phoneDetails = document.getElementById('phone-details');
+    phoneDetails.textContent = '';
+
     if (phones.length == 0) {
         console.log('no data found')
     }
     else {
         if (!phones.length <= 20) {
             const phonesLength20 = phones.splice(0, 20);
-            // console.log('splice', phonesLength20)
             phonesLength20.forEach(phone => {
                 const div = document.createElement('div');
                 div.classList.add('col');
@@ -61,11 +63,7 @@ const displayPhone = phones => {
                     </div>`;
                 resultContainer.appendChild(div);
             })
-
         }
-
-        console.log(phones.length)
-
     }
 }
 
@@ -73,21 +71,65 @@ const displayPhone = phones => {
 // Create a Method for Phone Details
 const phoneDetails = async phoneId => {
     const url = `https://openapi.programming-hero.com/api/phone/${phoneId}`
-    console.log(url)
     const res = await fetch(url);
     const data = await res.json()
     displayPhoneDetail(data.data)
 }
 
 const displayPhoneDetail = info => {
-    console.log(info.name)
-    console.log(info.releaseDate ? info.releaseDate : 'no date found')
-    const { storage, displaySize, chipSet, memory } = info.mainFeatures
-    console.log('storage:=', storage, 'display:=', displaySize, 'chip:=', chipSet, "memory:=", memory)
-    info.mainFeatures.sensors.forEach(sensor => console.log(sensor))
+    const { storage, displaySize, chipSet, memory } = info.mainFeatures;
+    const [first, second, third, fourth, fifth, sixth] = info.mainFeatures.sensors;
+    const { WLAN, Bluetooth, GPS, NFC, Radio, USB } = info.others;
+
+    const phoneDetails = document.getElementById('phone-details');
+    phoneDetails.textContent = '';
+    const div = document.createElement('div');
+    div.innerHTML = `
+         <div class="card w-50 mx-auto">
+                <div class="d-flex justify-content-center align-items-center shadow p-3">
+                    <div>
+                        <img src="${info.image}" class="img-fluid img-thumbnail" alt="">
+                    </div>
+                    <div class="ms-5">
+                        <h4>Name: <b>${info.name}</b></h4>
+                        <p>${info.releaseDate ? info.releaseDate : 'No Release Date Found'}</p>
+                    </div>
+                </div>
+             <div class="card-header shadow">
+                 <h4 class="text-info fw-bold">Main Features:-</h4>
+             </div>
+             <ul class="list-group list-group-flush">
+                 <li class="list-group-item"><b>Storage:</b> ${storage}</li>
+                 <li class="list-group-item"><b>Display Size:</b> ${displaySize}</li>
+                 <li class="list-group-item"><b>ChipSet:</b> ${chipSet}</li>
+                 <li class="list-group-item"><b>Memory:</b> ${memory}</li>
+             </ul>
+             <div class="card-header shadow">
+                 <h4 class="text-info fw-bold">Sensors:-</h4>
+             </div>
+             <ul class="list-group list-group-flush">
+                 <li class="list-group-item">${first}, ${second}, ${third}, ${fourth}, ${fifth}, ${sixth}</li>
+             </ul>
+             <div class="card-header shadow">
+                 <h4 class="text-info fw-bold">Others:-</h4>
+             </div>
+             <ul class="list-group list-group-flush">
+                 <li class="list-group-item"><b>WLAN:</b> ${WLAN}</li>
+                 <li class="list-group-item"><b>Bluetooth:</b> ${Bluetooth}</li>
+                 <li class="list-group-item"><b>GPS:</b> ${GPS}</li>
+                 <li class="list-group-item"><b>NFC:</b> ${NFC}</li>
+                 <li class="list-group-item"><b>Radio:</b> ${Radio}</li>
+                 <li class="list-group-item"><b>USB:</b> ${USB}</li>
+             </ul>
+         </div>`;
+    phoneDetails.appendChild(div);
+
+
+
+    /* info.mainFeatures.sensors.forEach(sensor => console.log("1", sensor))
     console.log('hello')
     for (const key in info.others) {
-        console.log(key)
-    }
+        console.log("2", key)
+    } */
 }
 
