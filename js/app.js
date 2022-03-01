@@ -1,3 +1,12 @@
+// Error Handle
+const errorHandle = (errorId, displayProperty) => {
+    document.getElementById('error-' + errorId).style.display = displayProperty;
+}
+
+// Spinner Handle
+const spinnerAndResultHandle = (id, displayElement) => {
+    document.getElementById(id).style.display = displayElement;
+}
 // Search button Function 
 const searchPhone = () => {
     const searchText = document.getElementById('search-input');
@@ -7,7 +16,7 @@ const searchPhone = () => {
     searchText.value = '';
 
     if (!searchPhoneName) {
-        console.log('input data')
+        errorHandle('blank-input', 'block');
     }
     else {
         // get data by Api
@@ -15,6 +24,9 @@ const searchPhone = () => {
         fetch(url)
             .then(res => res.json())
             .then(data => displayPhone(data.data))
+        errorHandle('blank-input', 'none');
+        spinnerAndResultHandle('spinner', 'block');
+        spinnerAndResultHandle('result-container', 'none');
     }
 }
 
@@ -27,7 +39,8 @@ const displayPhone = phones => {
     phoneDetails.textContent = '';
 
     if (phones.length == 0) {
-        console.log('no data found')
+        errorHandle('not-found', 'block');
+        spinnerAndResultHandle('spinner', 'none')
     }
     else {
         if (!phones.length <= 20) {
@@ -64,6 +77,9 @@ const displayPhone = phones => {
                 resultContainer.appendChild(div);
             })
         }
+        spinnerAndResultHandle('result-container', 'flex');
+        errorHandle('not-found', 'none');
+        spinnerAndResultHandle('spinner', 'none');
     }
 }
 

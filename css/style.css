@@ -3,6 +3,18 @@
     display: none;
 }
 
-#phoneDetails{
-    /* display: none; */
+#error-blank-input{
+    display: none;
+}
+
+#error-not-found{
+    display: none;
+}
+
+#spinner{
+    display: none;
+}
+
+#result-container{
+    display: none;
 }
