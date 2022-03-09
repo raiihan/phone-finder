@@ -1,3 +1,7 @@
+const searchText = document.getElementById('search-input');
+const resultContainer = document.getElementById('result-container');
+const phoneDetails = document.getElementById('phone-details');
+
 // Error Handle
 const errorHandle = (errorId, displayProperty) => {
     document.getElementById('error-' + errorId).style.display = displayProperty;
@@ -7,9 +11,16 @@ const errorHandle = (errorId, displayProperty) => {
 const spinnerAndResultHandle = (id, displayElement) => {
     document.getElementById(id).style.display = displayElement;
 }
+
+// Fetch API
+const getApi = searchPhoneName => {
+    const url = `https://openapi.programming-hero.com/api/phones?search=${searchPhoneName}`;
+    fetch(url)
+        .then(res => res.json())
+        .then(data => displayPhone(data.data))
+}
 // Search button Function 
 const searchPhone = () => {
-    const searchText = document.getElementById('search-input');
     const searchPhoneName = searchText.value.toLowerCase();
 
     //    clear Search field
@@ -20,11 +31,7 @@ const searchPhone = () => {
         errorHandle('blank-input', 'block');
     }
     else {
-        // get data by Api
-        const url = `https://openapi.programming-hero.com/api/phones?search=${searchPhoneName}`;
-        fetch(url)
-            .then(res => res.json())
-            .then(data => displayPhone(data.data))
+        getApi(searchPhoneName)
 
         // when get data that time error display none
         errorHandle('blank-input', 'none');
@@ -39,10 +46,9 @@ const searchPhone = () => {
 
 // Iteration phones array
 const displayPhone = phones => {
-    const resultContainer = document.getElementById('result-container');
+
     resultContainer.textContent = '';
     // Phone Details
-    const phoneDetails = document.getElementById('phone-details');
     phoneDetails.textContent = '';
 
     // Check the data is available
@@ -53,41 +59,27 @@ const displayPhone = phones => {
         spinnerAndResultHandle('spinner', 'none')
     }
     else {
+        console.log(phones);
         // Display the maximum 20 items
-        if (!phones.length <= 20) {
-            const phonesLength20 = phones.splice(0, 20);
-            phonesLength20.forEach(phone => {
-                const div = document.createElement('div');
-                div.classList.add('col');
-                div.innerHTML = `
+        const phonesLength20 = phones.splice(0, 20);
+        phonesLength20.forEach(phone => {
+            const div = document.createElement('div');
+            div.classList.add('col');
+            div.innerHTML = `
                     <div class="card w-75">
                         <img src="${phone.image}" class="card-img-top img-thumbnail w-75 mx-auto" alt="Product Image">
                         <div class="card-body">
                             <h5 class="card-title">Name: ${phone.phone_name}</h5>
                             <p class="card-text">Name: ${phone.brand}</p>
-                            <button onclick="phoneDetails('${phone.slug}')" class="btn btn-success">Details</button>
+                            <button onclick="phoneDetailApi('${phone.slug}')" class="btn btn-success">Details</button>
                         </div>
                     </div>`;
-                resultContainer.appendChild(div);
-            })
-        }
-        else {
-            // display when items under 20
-            phones.forEach(phone => {
-                const div = document.createElement('div');
-                div.classList.add('col');
-                div.innerHTML = `
-                    <div class="card w-75">
-                        <img src="${phone.image}" class="card-img-top img-thumbnail w-75 mx-auto" alt="Product Image">
-                        <div class="card-body">
-                            <h5 class="card-title">Name: ${phone.phone_name}</h5>
-                            <p class="card-text">Name: ${phone.brand}</p>
-                            <button onclick="phoneDetails('${phone.slug}')" class="btn btn-success">Details</button>
-                        </div>
-                    </div>`;
-                resultContainer.appendChild(div);
-            })
-        }
+            resultContainer.appendChild(div);
+        })
+
+        console.log(phonesLength20);
+        console.log(phones);
+
         // when find the phone that times error display none
         errorHandle('not-found', 'none');
         // When Spinner Loading Complete then Display Phone
@@ -99,7 +91,7 @@ const displayPhone = phones => {
 
 
 // Create a Method for Phone Details
-const phoneDetails = async phoneId => {
+const phoneDetailApi = async phoneId => {
     const url = `https://openapi.programming-hero.com/api/phone/${phoneId}`
     const res = await fetch(url);
     const data = await res.json()
@@ -113,7 +105,6 @@ const displayPhoneDetail = info => {
     const [first, second, third, fourth, fifth, sixth] = info.mainFeatures.sensors;
 
     // Get and set phone details by id
-    const phoneDetails = document.getElementById('phone-details');
     phoneDetails.textContent = '';
     const div = document.createElement('div');
     div.innerHTML = `
